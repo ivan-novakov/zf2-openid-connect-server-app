@@ -6,8 +6,7 @@ require 'init_autoloader.php';
 
 use Zend\Http\Client;
 
-// $serverUri = 'https://hroch.cesnet.cz/devel';
-$serverUri = 'https://hroch.cesnet.cz/openid_connect';
+$serverUri = 'https://example.org/openid_connect';
 $authUri = $serverUri . '/oic/authorize';
 $tokenUri = $serverUri . '/oic/token';
 $userInfoUri = $serverUri . '/oic/userinfo';

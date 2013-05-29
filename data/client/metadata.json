@@ -1,0 +1,16 @@
+{
+    "clients" : [
+        {
+            "id" : "test-console-client-basicauth",
+            "type" : "public",
+            "redirect_uri" : "https://client/basic-auth",
+            "authentication" : {
+                "method" : "secret",
+                "options" : {
+                    "auth" : "b5684ac738b200ba8de5185a5c6f1418"
+                }
+            },
+            "user_authentication_handler" : "basic-auth"
+        }
+    ]
+}

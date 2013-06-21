@@ -3,6 +3,7 @@
 namespace PhpIdServer\OpenIdConnect\Response\Authorize;
 
 use PhpIdServer\OpenIdConnect\Response\AbstractResponse;
+use Zend\Uri\Uri;
 
 
 class AbstractAuthorizeResponse extends AbstractResponse
@@ -26,9 +27,8 @@ class AbstractAuthorizeResponse extends AbstractResponse
     public function getHttpResponse()
     {
         $this->httpResponse->getHeaders()->addHeaders(array(
-            'Location' => $this->constructRedirectUri()
+            'Location' => $this->getRedirectUri()
         ));
-        
         $this->httpResponse->setStatusCode(302);
         
         return parent::getHttpResponse();
@@ -46,9 +46,22 @@ class AbstractAuthorizeResponse extends AbstractResponse
     }
 
 
-    protected function constructRedirectUri()
+    public function getRedirectUri()
     {
-        return $this->redirectLocation;
+        return $this->constructRedirectUri($this->redirectLocation);
+    }
+
+
+    protected function constructRedirectUri($uri = null, array $query = array())
+    {
+        $uri = new Uri($uri);
+        
+        if (! empty($query)) {
+            $query = $uri->getQueryAsArray() + $query;
+            $uri->setQuery($query);
+        }
+        
+        return $uri;
     }
 
 

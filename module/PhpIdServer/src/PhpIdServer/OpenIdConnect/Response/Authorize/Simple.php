@@ -21,9 +21,9 @@ class Simple extends AbstractAuthorizeResponse
     }
 
 
-    protected function constructRedirectUri()
+    public function getRedirectUri()
     {
-        if (NULL === $this->redirectLocation) {
+        if (null === $this->redirectLocation) {
             throw new Exception\NoRedirectLocationException();
         }
         
@@ -31,10 +31,6 @@ class Simple extends AbstractAuthorizeResponse
             throw new Exception\MissingFieldException(Field::CODE);
         }
         
-        $uri = \Zend\Uri\UriFactory::factory($this->redirectLocation);
-        $uri->setQuery($this->getFields());
-        $uri->normalize();
-        
-        return $uri->toString();
+        return $this->constructRedirectUri($this->redirectLocation, $this->getFields());
     }
 }

@@ -119,16 +119,11 @@ class Error extends AbstractAuthorizeResponse
     }
 
 
-    protected function constructRedirectUri()
+    public function getRedirectUri()
     {
-        $uri = new Uri(parent::constructRedirectUri());
-        
-        $query = $uri->getQueryAsArray() + array(
+        return $this->constructRedirectUri($this->redirectLocation, array(
             'error' => $this->errorMessage,
             'error_description' => $this->errorDescription
-        );
-        $uri->setQuery($query);
-
-        return $uri;
+        ));
     }
 }

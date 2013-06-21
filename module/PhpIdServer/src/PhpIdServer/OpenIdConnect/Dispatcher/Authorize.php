@@ -216,7 +216,7 @@ class Authorize extends AbstractDispatcher
         $authorizationCode = $sessionManager->createAuthorizationCode($session, $client);
         
         $response->setAuthorizationCode($authorizationCode->getCode());
-        $response->setRedirectLocation($client->getRedirectUri());
+        $response->setRedirectLocation($this->getRedirectUri());
         
         if ($state = $request->getState()) {
             $response->setState($state);
@@ -289,5 +289,13 @@ class Authorize extends AbstractDispatcher
         $response = $this->getAuthorizeResponse(true);
         
         return new Response\Authorize\Error($response->getRawHttpResponse());
+    }
+
+
+    protected function getRedirectUri()
+    {
+        return $this->getContext(true)
+            ->getRequest()
+            ->getRedirectUri();
     }
 }

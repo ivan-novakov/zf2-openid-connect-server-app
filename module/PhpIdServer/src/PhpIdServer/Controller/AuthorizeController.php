@@ -102,7 +102,7 @@ class AuthorizeController extends BaseController
         $response = null;
         $context = $this->getAuthorizeContext();
         $dispatcher = $this->getAuthorizeDispatcher();
-        
+
         /*
          * User authentication
          */
@@ -113,14 +113,14 @@ class AuthorizeController extends BaseController
             try {
                 $response = $dispatcher->preDispatch();
                 if ($response instanceof Response\Authorize\Error) {
-                    return $this->_errorResponse($response, 'Error in preDispatch()');
+                    return $this->errorResponse($response, 'Error in preDispatch()');
                 }
                 
                 $this->_logInfo('preDispatch OK');
                 $this->saveContext($context);
             } catch (\Exception $e) {
                 $response = $dispatcher->serverErrorResponse(sprintf("[%s] %s", get_class($e), $e->getMessage()));
-                return $this->_errorResponse($response, 'General error in preDispatch');
+                return $this->errorResponse($response, 'General error in preDispatch');
             }
             
             $manager = $this->getAuthenticationManager();
@@ -151,29 +151,28 @@ class AuthorizeController extends BaseController
             
             $response = $dispatcher->dispatch();
             if ($response instanceof Response\Authorize\Error) {
-                return $this->_errorResponse($response, 'Error in dispatch');
+                return $this->errorResponse($response, 'Error in dispatch');
             }
         } catch (\Exception $e) {
             $response = $dispatcher->serverErrorResponse(sprintf("[%s] %s", get_class($e), $e->getMessage()));
-            return $this->_errorResponse($response, 'General error in dispatch');
+            return $this->errorResponse($response, 'General error in dispatch');
         }
         
-        return $this->_validResponse($response);
+        return $this->validResponse($response);
     }
 
 
-    protected function _validResponse(Response\Authorize\Simple $response)
+    protected function validResponse(Response\Authorize\Simple $response)
     {
         $this->_logInfo('dispatch OK, returning response...');
-        
         return $response->getHttpResponse();
     }
 
 
-    protected function _errorResponse(Response\Authorize\Error $response, $label = 'Error')
+    protected function errorResponse(Response\Authorize\Error $response, $label = 'Error')
     {
+        $this->clearContext();
         $this->_logError(sprintf("%s: %s (%s)", $label, $response->getErrorMessage(), $response->getErrorDescription()));
-        
         return $response->getHttpResponse();
     }
 }

@@ -43,23 +43,23 @@ class Error extends AbstractAuthorizeResponse
 
     const ERROR_CLIENT_INVALID_CLIENT = 'client_invalid_client';
 
-    protected $_errorType = self::TYPE_INVALID_AUTHENTICATION;
+    protected $errorType = self::TYPE_INVALID_AUTHENTICATION;
 
-    protected $_errorMessage = '';
+    protected $errorMessage = '';
 
-    protected $_errorDescription = NULL;
+    protected $errorDescription = NULL;
 
 
     public function setInvalidClientError($message, $description = NULL)
     {
-        $this->_errorType = self::TYPE_INVALID_CLIENT;
+        $this->errorType = self::TYPE_INVALID_CLIENT;
         $this->setError($message, $description);
     }
 
 
     public function isInvalidClientError()
     {
-        return ($this->_errorType == self::TYPE_INVALID_CLIENT);
+        return ($this->errorType == self::TYPE_INVALID_CLIENT);
     }
 
 
@@ -71,8 +71,8 @@ class Error extends AbstractAuthorizeResponse
      */
     public function setError($message, $description = NULL)
     {
-        $this->_errorMessage = $message;
-        $this->_errorDescription = $description;
+        $this->errorMessage = $message;
+        $this->errorDescription = $description;
     }
 
 
@@ -83,7 +83,7 @@ class Error extends AbstractAuthorizeResponse
      */
     public function getErrorMessage()
     {
-        return $this->_errorMessage;
+        return $this->errorMessage;
     }
 
 
@@ -94,7 +94,7 @@ class Error extends AbstractAuthorizeResponse
      */
     public function getErrorDescription()
     {
-        return $this->_errorDescription;
+        return $this->errorDescription;
     }
 
 
@@ -110,7 +110,7 @@ class Error extends AbstractAuthorizeResponse
         /*
          * Otherwise show an error to the user.
          */
-        $this->httpResponse->setContent(sprintf("Error: %s (%s)", $this->_errorMessage, $this->_errorDescription));
+        $this->httpResponse->setContent(sprintf("Error: %s (%s)", $this->errorMessage, $this->errorDescription));
         $this->httpResponse->setStatusCode(400);
         
         $this->_setNoCacheHeaders($this->httpResponse);
@@ -122,10 +122,13 @@ class Error extends AbstractAuthorizeResponse
     protected function constructRedirectUri()
     {
         $uri = new Uri(parent::constructRedirectUri());
-        $uri->setQuery(array(
-            'error' => $this->_errorMessage,
-            'error_description' => $this->_errorDescription
-        ));
+        
+        $query = $uri->getQueryAsArray() + array(
+            'error' => $this->errorMessage,
+            'error_description' => $this->errorDescription
+        );
+        $uri->setQuery($query);
+
         return $uri;
     }
 }

@@ -2,6 +2,7 @@
     "name" : "ivan-novakov/php-openid-connect-server",
     "description" : "OpenID Connect server implementation in PHP",
     "type" : "library",
+    "license" : "BSD-3-Clause",
     "keywords" : [
         "openid connect", "authentication", "oauth2"
     ],
@@ -15,7 +16,6 @@
     ],
     "require" : {
         "php" : ">=5.3.3",
-        "zendframework/zendframework" : ">=2.2.0",
-        "ivan-novakov/phpid-server": "dev-master"
+        "zendframework/zendframework" : ">=2.2.0"
     }
 }

@@ -1,0 +1,16 @@
+- use new ZF2 abstract factories
+
+- handle multivalue Shibboleth attributes
+
+- client validator
+  - validate match between client ID and redirect URI
+  - ...
+  
+- more verbose logs
+  - show user ID in log  
+  
+- endpoint for logout (delete login session)
+
+- re-organize views and renderers
+
+- add dispatch controller tests

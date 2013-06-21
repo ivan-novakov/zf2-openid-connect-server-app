@@ -1,0 +1,29 @@
+{
+    "clients" : [
+        {
+            "id" : "test-console-client",
+            "type" : "public",
+            "redirect_uri" : "https://dummy",
+            "authentication" : {
+                "method" : "secret",
+                "options" : {
+                    "auth" : "testclientsecret"
+                }
+            },
+            "user_authentication_handler" : "basic-auth"
+        },
+
+        {
+            "id" : "test-web-client",
+            "type" : "confidential",
+            "redirect_uri" : "https://hroch.cesnet.cz/phpid-client/endpoint",
+            "authentication" : {
+                "method" : "pki",
+                "options" : {
+                    "certificate" : "xxx"
+                }
+            }
+        }
+
+    ]
+}

@@ -13,24 +13,23 @@ class AbstractAuthorizeResponse extends AbstractResponse
      * 
      * @var array
      */
-    protected $_fields = array();
+    protected $fields = array();
 
     /**
      * The redirect URI.
      * 
      * @var string
      */
-    protected $_redirectLocation = NULL;
+    protected $redirectLocation = NULL;
 
 
-    public function getHttpResponse ()
+    public function getHttpResponse()
     {
-        $this->_httpResponse->getHeaders()
-            ->addHeaders(array(
-            'Location' => $this->_constructRedirectUri()
+        $this->httpResponse->getHeaders()->addHeaders(array(
+            'Location' => $this->constructRedirectUri()
         ));
         
-        $this->_httpResponse->setStatusCode(302);
+        $this->httpResponse->setStatusCode(302);
         
         return parent::getHttpResponse();
     }
@@ -41,32 +40,32 @@ class AbstractAuthorizeResponse extends AbstractResponse
      * 
      * @param string $location
      */
-    public function setRedirectLocation ($location)
+    public function setRedirectLocation($location)
     {
-        $this->_redirectLocation = $location;
+        $this->redirectLocation = $location;
     }
 
 
-    protected function _constructRedirectUri ()
+    protected function constructRedirectUri()
     {
-        return $this->_redirectLocation;
+        return $this->redirectLocation;
     }
 
 
-    protected function _addField ($fieldName, $fieldValue)
+    protected function addField($fieldName, $fieldValue)
     {
-        $this->_fields[$fieldName] = $fieldValue;
+        $this->fields[$fieldName] = $fieldValue;
     }
 
 
-    protected function _getFields ()
+    protected function getFields()
     {
-        return $this->_fields;
+        return $this->fields;
     }
 
 
-    protected function _isField ($fieldName)
+    protected function isField($fieldName)
     {
-        return (isset($this->_fields[$fieldName]));
+        return (isset($this->fields[$fieldName]));
     }
 }

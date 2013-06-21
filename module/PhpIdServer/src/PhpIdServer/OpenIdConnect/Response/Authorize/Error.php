@@ -2,6 +2,8 @@
 
 namespace PhpIdServer\OpenIdConnect\Response\Authorize;
 
+use Zend\Uri\Uri;
+
 
 class Error extends AbstractAuthorizeResponse
 {
@@ -48,14 +50,14 @@ class Error extends AbstractAuthorizeResponse
     protected $_errorDescription = NULL;
 
 
-    public function setInvalidClientError ($message, $description = NULL)
+    public function setInvalidClientError($message, $description = NULL)
     {
         $this->_errorType = self::TYPE_INVALID_CLIENT;
         $this->setError($message, $description);
     }
 
 
-    public function isInvalidClientError ()
+    public function isInvalidClientError()
     {
         return ($this->_errorType == self::TYPE_INVALID_CLIENT);
     }
@@ -67,7 +69,7 @@ class Error extends AbstractAuthorizeResponse
      * @param string $message
      * @param string $description
      */
-    public function setError ($message, $description = NULL)
+    public function setError($message, $description = NULL)
     {
         $this->_errorMessage = $message;
         $this->_errorDescription = $description;
@@ -79,7 +81,7 @@ class Error extends AbstractAuthorizeResponse
      * 
      * @return string
      */
-    public function getErrorMessage ()
+    public function getErrorMessage()
     {
         return $this->_errorMessage;
     }
@@ -90,13 +92,13 @@ class Error extends AbstractAuthorizeResponse
      * 
      * @return string|null
      */
-    public function getErrorDescription ()
+    public function getErrorDescription()
     {
         return $this->_errorDescription;
     }
 
 
-    public function getHttpResponse ()
+    public function getHttpResponse()
     {
         /*
          * If the error is not client related - return back a redirect with the error message.
@@ -108,20 +110,22 @@ class Error extends AbstractAuthorizeResponse
         /*
          * Otherwise show an error to the user.
          */
-        $this->_httpResponse->setContent(sprintf("Error: %s (%s)", $this->_errorMessage, $this->_errorDescription));
-        $this->_httpResponse->setStatusCode(400);
+        $this->httpResponse->setContent(sprintf("Error: %s (%s)", $this->_errorMessage, $this->_errorDescription));
+        $this->httpResponse->setStatusCode(400);
         
-        $this->_setNoCacheHeaders($this->_httpResponse);
+        $this->_setNoCacheHeaders($this->httpResponse);
         
-        return $this->_httpResponse;
+        return $this->httpResponse;
     }
 
 
-    protected function _constructRedirectUri ()
+    protected function constructRedirectUri()
     {
-        return sprintf('%s?%s', parent::_constructRedirectUri(), http_build_query(array(
-            'error' => $this->_errorMessage, 
+        $uri = new Uri(parent::constructRedirectUri());
+        $uri->setQuery(array(
+            'error' => $this->_errorMessage,
             'error_description' => $this->_errorDescription
-        )));
+        ));
+        return $uri;
     }
 }

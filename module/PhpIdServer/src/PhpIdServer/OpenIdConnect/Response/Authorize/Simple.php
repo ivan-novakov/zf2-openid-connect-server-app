@@ -9,30 +9,30 @@ class Simple extends AbstractAuthorizeResponse
 {
 
 
-    public function setAuthorizationCode ($code)
+    public function setAuthorizationCode($code)
     {
-        $this->_addField(Field::CODE, $code);
+        $this->addField(Field::CODE, $code);
     }
 
 
-    public function setState ($state)
+    public function setState($state)
     {
-        $this->_addField(Field::STATE, $state);
+        $this->addField(Field::STATE, $state);
     }
 
 
-    protected function _constructRedirectUri ()
+    protected function constructRedirectUri()
     {
-        if (NULL === $this->_redirectLocation) {
+        if (NULL === $this->redirectLocation) {
             throw new Exception\NoRedirectLocationException();
         }
         
-        if (! $this->_isField(Field::CODE)) {
+        if (! $this->isField(Field::CODE)) {
             throw new Exception\MissingFieldException(Field::CODE);
         }
         
-        $uri = \Zend\Uri\UriFactory::factory($this->_redirectLocation);
-        $uri->setQuery($this->_getFields());
+        $uri = \Zend\Uri\UriFactory::factory($this->redirectLocation);
+        $uri->setQuery($this->getFields());
         $uri->normalize();
         
         return $uri->toString();

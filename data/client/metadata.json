@@ -16,7 +16,9 @@
         {
             "id" : "test-chabruz-client",
             "type" : "public",
-            "redirect_uri" : "https://chabruz.feld.cvut.cz/devel/oic/client?redirect",
+            "redirect_uri" : [
+                "https://chabruz.feld.cvut.cz/devel/oic/client?redirect"
+            ],
             "authentication" : {
                 "method" : "secret",
                 "options" : {
@@ -25,8 +27,6 @@
             },
             "user_authentication_handler" : "basic-auth"
         }
-
-
 
     ]
 }

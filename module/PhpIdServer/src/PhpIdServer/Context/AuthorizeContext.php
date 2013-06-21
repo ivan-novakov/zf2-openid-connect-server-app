@@ -14,51 +14,51 @@ class AuthorizeContext extends AbstractContext
     /**
      * The OIC request object.
      * 
-     * @var OpenIdConnect\Request\AbstractRequest
+     * @var Authorize\Simple
      */
-    protected $_request = NULL;
+    protected $request = NULL;
 
     /**
      * Client object.
      * 
      * @var Client
      */
-    protected $_client = NULL;
+    protected $client = NULL;
 
     /**
      * Authentication info object.
      * 
      * @var Authentication\Info
      */
-    protected $_authenticationInfo = NULL;
+    protected $authenticationInfo = NULL;
 
     /**
      * User object.
      * 
      * @var UserInterface
      */
-    protected $_user = NULL;
+    protected $user = NULL;
 
 
     /**
      * Sets to OIC request object.
      * 
-     * @param mixed $request
+     * @param Authorize\Simple $request
      */
-    public function setRequest ($request)
+    public function setRequest(Authorize\Simple $request)
     {
-        $this->_request = $request;
+        $this->request = $request;
     }
 
 
     /**
      * Returns the OIC request object.
      * 
-     * @return mixed
+     * @return Authorize\Simple
      */
-    public function getRequest ()
+    public function getRequest()
     {
-        return $this->_request;
+        return $this->request;
     }
 
 
@@ -67,9 +67,9 @@ class AuthorizeContext extends AbstractContext
      * 
      * @param Client $client
      */
-    public function setClient (Client $client)
+    public function setClient(Client $client)
     {
-        $this->_client = $client;
+        $this->client = $client;
     }
 
 
@@ -78,9 +78,9 @@ class AuthorizeContext extends AbstractContext
      * 
      * @return Client
      */
-    public function getClient ()
+    public function getClient()
     {
-        return $this->_client;
+        return $this->client;
     }
 
 
@@ -89,9 +89,9 @@ class AuthorizeContext extends AbstractContext
      * 
      * @return boolean
      */
-    public function isUserAuthenticated ()
+    public function isUserAuthenticated()
     {
-        return ($this->_authenticationInfo instanceof Authentication\Info && $this->_authenticationInfo->isAuthenticated());
+        return ($this->authenticationInfo instanceof Authentication\Info && $this->authenticationInfo->isAuthenticated());
     }
 
 
@@ -100,9 +100,9 @@ class AuthorizeContext extends AbstractContext
      * 
      * @param Authentication\Info $info
      */
-    public function setAuthenticationInfo (Authentication\Info $info)
+    public function setAuthenticationInfo(Authentication\Info $info)
     {
-        $this->_authenticationInfo = $info;
+        $this->authenticationInfo = $info;
     }
 
 
@@ -111,9 +111,9 @@ class AuthorizeContext extends AbstractContext
      * 
      * @return Authentication\Info
      */
-    public function getAuthenticationInfo ()
+    public function getAuthenticationInfo()
     {
-        return $this->_authenticationInfo;
+        return $this->authenticationInfo;
     }
 
 
@@ -122,9 +122,9 @@ class AuthorizeContext extends AbstractContext
      * 
      * @param UserInterface $user
      */
-    public function setUser (UserInterface $user)
+    public function setUser(UserInterface $user)
     {
-        $this->_user = $user;
+        $this->user = $user;
     }
 
 
@@ -133,8 +133,8 @@ class AuthorizeContext extends AbstractContext
      * 
      * @return UserInterface
      */
-    public function getUser ()
+    public function getUser()
     {
-        return $this->_user;
+        return $this->user;
     }
 }

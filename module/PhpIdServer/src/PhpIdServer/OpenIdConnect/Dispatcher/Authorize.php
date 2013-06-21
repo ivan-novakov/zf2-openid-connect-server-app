@@ -31,13 +31,6 @@ class Authorize extends AbstractDispatcher
     protected $response = NULL;
 
     /**
-     * The redirect URI for the current client.
-     * 
-     * @var string
-     */
-    protected $clientRedirectUri = NULL;
-
-    /**
      * The amount of seconds after an invalid authentication, when it is possible to perform another authentication.
      * 
      * @var integer
@@ -169,13 +162,6 @@ class Authorize extends AbstractDispatcher
         }
         
         /*
-        $this->clientRedirectUri = $client->getRedirectUri();
-        if (! $this->clientRedirectUri) {
-            return $this->clientErrorResponse(Error::ERROR_INVALID_REQUEST, 'no redirect uri found');
-        }
-        */
-        
-        /*
          * Check if there has been an unsuccessful authentication attempt
          */
         $authenticationInfo = $context->getAuthenticationInfo();
@@ -201,11 +187,6 @@ class Authorize extends AbstractDispatcher
         $client = $context->getClient();
         if (! ($client instanceof Client)) {
             return $this->clientErrorResponse(Error::ERROR_INVALID_REQUEST, 'no client data in context');
-        }
-        
-        $this->clientRedirectUri = $client->getRedirectUri();
-        if (! $this->clientRedirectUri) {
-            return $this->clientErrorResponse(Error::ERROR_INVALID_REQUEST, 'no redirect uri found');
         }
         
         $user = $context->getUser();

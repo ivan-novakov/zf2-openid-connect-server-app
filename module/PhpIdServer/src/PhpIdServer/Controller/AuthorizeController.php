@@ -97,7 +97,7 @@ class AuthorizeController extends BaseController
 
     public function indexAction()
     {
-        $this->_logInfo($_SERVER['REQUEST_URI']);
+        $this->logInfo($_SERVER['REQUEST_URI']);
         
         $response = null;
         $context = $this->getAuthorizeContext();
@@ -108,16 +108,15 @@ class AuthorizeController extends BaseController
          */
         if (! $context->isUserAuthenticated()) {
             
-            $this->_logInfo('user not authenticated - running preDispatch()');
+            $this->logInfo('user not authenticated - running preDispatch()');
             
             try {
                 $response = $dispatcher->preDispatch();
                 if ($response instanceof Response\Authorize\Error) {
                     return $this->errorResponse($response, 'Error in preDispatch()');
                 }
-                
-                $this->_logInfo('preDispatch OK');
                 $this->saveContext($context);
+                $this->logInfo('preDispatch OK');
             } catch (\Exception $e) {
                 $response = $dispatcher->serverErrorResponse(sprintf("[%s] %s", get_class($e), $e->getMessage()));
                 return $this->errorResponse($response, 'General error in preDispatch');
@@ -126,9 +125,9 @@ class AuthorizeController extends BaseController
             $manager = $this->getAuthenticationManager();
             
             $authenticationHandlerName = $manager->getAuthenticationHandler();
-            $this->_logInfo(sprintf("redirecting user to authentication handler [%s]", $authenticationHandlerName));
+            $this->logInfo(sprintf("redirecting user to authentication handler [%s]", $authenticationHandlerName));
             
-            return $this->_redirectToRoute($manager->getAuthenticationRouteName(), array(
+            return $this->redirectToRoute($manager->getAuthenticationRouteName(), array(
                 'controller' => $authenticationHandlerName
             ));
         }
@@ -147,7 +146,7 @@ class AuthorizeController extends BaseController
          * Dispatching response
          */
         try {
-            $this->_logInfo('dispatching response...');
+            $this->logInfo('dispatching response...');
             
             $response = $dispatcher->dispatch();
             if ($response instanceof Response\Authorize\Error) {
@@ -164,7 +163,7 @@ class AuthorizeController extends BaseController
 
     protected function validResponse(Response\Authorize\Simple $response)
     {
-        $this->_logInfo('dispatch OK, returning response...');
+        $this->logInfo('dispatch OK, returning response...');
         return $response->getHttpResponse();
     }
 
@@ -172,7 +171,7 @@ class AuthorizeController extends BaseController
     protected function errorResponse(Response\Authorize\Error $response, $label = 'Error')
     {
         $this->clearContext();
-        $this->_logError(sprintf("%s: %s (%s)", $label, $response->getErrorMessage(), $response->getErrorDescription()));
+        $this->logError(sprintf("%s: %s (%s)", $label, $response->getErrorMessage(), $response->getErrorDescription()));
         return $response->getHttpResponse();
     }
 }

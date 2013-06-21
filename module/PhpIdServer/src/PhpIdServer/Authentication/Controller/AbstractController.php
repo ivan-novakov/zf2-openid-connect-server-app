@@ -158,9 +158,8 @@ abstract class AbstractController extends BaseController implements Authenticati
      */
     public function authenticateAction()
     {
-        $this->_logInfo(sprintf("Authentication controller [%s]", $this->getLabel()));
+        $this->logInfo(sprintf("Authentication controller [%s]", $this->getLabel()));
         
-        // $context = $this->getServiceLocator()->get('AuthorizeContext');
         $context = $this->getAuthorizeContext();
         
         try {
@@ -172,25 +171,24 @@ abstract class AbstractController extends BaseController implements Authenticati
             $context->setUser($user);
             $authenticationInfo = $this->_initSuccessAuthenticationInfo();
         } catch (Exception\InvalidUserDataException $e) {
-            $this->_logError(sprintf("Invalid user data exception: %s", $e->getMessage()));
+            $this->logError(sprintf("Invalid user data exception: %s", $e->getMessage()));
             $authenticationInfo = $this->_initFailureAuthenticationInfo('invalid_user_data', $e->getMessage());
         } catch (Exception\AuthenticationException $e) {
-            $this->_logError(sprintf("Authentication exception: %s (%s)", $e->getError(), $e->getDescription()));
+            $this->logError(sprintf("Authentication exception: %s (%s)", $e->getError(), $e->getDescription()));
             $authenticationInfo = $this->_initFailureAuthenticationInfo($e->getError(), $e->getDescription());
         } catch (\Exception $e) {
-            $this->_logError(sprintf("General exception during authentication: [%s] %s", get_class($e), $e->getMessage()));
+            $this->logError(sprintf("General exception during authentication: [%s] %s", get_class($e), $e->getMessage()));
             $authenticationInfo = $this->_initFailureAuthenticationInfo('general_error');
         }
         
         $context->setAuthenticationInfo($authenticationInfo);
-        // $this->_saveContext($context);
-        $this->getContextStorage()->save($context);
+        $this->saveContext($context);
         
         $authorizeRoute = 'php-id-server/authorize-endpoint';
         
-        $this->_logInfo(sprintf("redirecting back to authorize endpoint '%s'", $authorizeRoute));
+        $this->logInfo(sprintf("redirecting back to authorize endpoint '%s'", $authorizeRoute));
         
-        return $this->_redirectToRoute($authorizeRoute);
+        return $this->redirectToRoute($authorizeRoute);
     }
 
 
@@ -219,7 +217,7 @@ abstract class AbstractController extends BaseController implements Authenticati
     }
 
 
-    protected function _formatLogMessage($message)
+    protected function formatLogMessage($message)
     {
         return sprintf("CONTROLLER AUTH [%s] %s", $this->getLabel(), $message);
     }

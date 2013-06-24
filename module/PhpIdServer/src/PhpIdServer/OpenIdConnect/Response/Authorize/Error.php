@@ -2,8 +2,6 @@
 
 namespace PhpIdServer\OpenIdConnect\Response\Authorize;
 
-use Zend\Uri\Uri;
-
 
 class Error extends AbstractAuthorizeResponse
 {

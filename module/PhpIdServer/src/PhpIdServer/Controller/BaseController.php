@@ -2,8 +2,6 @@
 
 namespace PhpIdServer\Controller;
 
-use PhpIdServer\Context\AuthorizeContext;
-use PhpIdServer\Context\Storage\StorageInterface;
 use Zend\Log\Logger;
 
 
@@ -11,38 +9,11 @@ abstract class BaseController extends \Zend\Mvc\Controller\AbstractActionControl
 {
 
     /**
-     * @var StorageInterface
-     */
-    protected $contextStorage = null;
-
-    /**
      * @var Logger
      */
     protected $logger = null;
 
     protected $logIdent = 'abstract base';
-
-
-    /**
-     * Sets the context storage.
-     * 
-     * @param StorageInterface $contextStorage
-     */
-    public function setContextStorage(StorageInterface $contextStorage)
-    {
-        $this->contextStorage = $contextStorage;
-    }
-
-
-    /**
-     * Returns the context storage.
-     * 
-     * @return StorageInterface
-     */
-    public function getContextStorage()
-    {
-        return $this->contextStorage;
-    }
 
 
     /**
@@ -64,18 +35,6 @@ abstract class BaseController extends \Zend\Mvc\Controller\AbstractActionControl
     public function getLogger()
     {
         return $this->logger;
-    }
-
-
-    protected function saveContext(AuthorizeContext $context)
-    {
-        $this->getContextStorage()->save($context);
-    }
-
-
-    protected function clearContext()
-    {
-        $this->getContextStorage()->clear();
     }
 
 

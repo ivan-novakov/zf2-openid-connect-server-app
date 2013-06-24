@@ -11,6 +11,22 @@ use PhpIdServer\User\UserInterface;
 class AuthorizeContext extends AbstractContext
 {
 
+    const STATUS_UNKNOWN = 10;
+
+    const STATUS_INIT = 20;
+
+    const STATUS_PRE_DISPATCHED = 30;
+
+    const STATUS_AUTHENTICATED = 40;
+
+    const STATUS_DISPATCHED = 100;
+
+    /**
+     * Status of the authorize request.
+     * @var integer
+     */
+    protected $status = self::STATUS_UNKNOWN;
+
     /**
      * The OIC request object.
      * 
@@ -38,6 +54,18 @@ class AuthorizeContext extends AbstractContext
      * @var UserInterface
      */
     protected $user = NULL;
+
+
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+
+    public function getStatus()
+    {
+        return $this->status;
+    }
 
 
     /**

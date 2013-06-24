@@ -3,18 +3,20 @@
 namespace PhpIdServer\Controller;
 
 use PhpIdServer\OpenIdConnect\Response;
-use PhpIdServer\Context\AuthorizeContext;
 use PhpIdServer\OpenIdConnect\Dispatcher;
 use PhpIdServer\Authentication;
+use PhpIdServer\Context\AuthorizeContextManager;
+use PhpIdServer\General\Exception\MissingDependencyException;
 
 
 class AuthorizeController extends BaseController
 {
 
     /**
-     * @var AuthorizeContext
+     * Authorize context manager.
+     * @var AuthorizeContextManager
      */
-    protected $authorizeContext = null;
+    protected $authorizeContextManager;
 
     /**
      * @var Dispatcher\Authorize
@@ -30,24 +32,23 @@ class AuthorizeController extends BaseController
 
 
     /**
-     * Sets the authorize context.
-     * 
-     * @param AuthorizeContext $authorizeContext
+     * @return AuthorizeContextManager
      */
-    public function setAuthorizeContext(AuthorizeContext $authorizeContext)
+    public function getAuthorizeContextManager($throwException = false)
     {
-        $this->authorizeContext = $authorizeContext;
+        if (! $this->authorizeContextManager instanceof AuthorizeContextManager && $throwException) {
+            throw new MissingDependencyException('authorize context manager');
+        }
+        return $this->authorizeContextManager;
     }
 
 
     /**
-     * Returns the authorize context.
-     * 
-     * @return AuthorizeContext
+     * @param AuthorizeContextManager $authorizeContextManager
      */
-    public function getAuthorizeContext()
+    public function setAuthorizeContextManager(AuthorizeContextManager $authorizeContextManager)
     {
-        return $this->authorizeContext;
+        $this->authorizeContextManager = $authorizeContextManager;
     }
 
 
@@ -100,9 +101,13 @@ class AuthorizeController extends BaseController
         $this->logInfo($_SERVER['REQUEST_URI']);
         
         $response = null;
-        $context = $this->getAuthorizeContext();
+        
+        $contextManager = $this->getAuthorizeContextManager();
+        $context = $contextManager->initContext();
+        
         $dispatcher = $this->getAuthorizeDispatcher();
-
+        $dispatcher->setContext($context);
+        
         /*
          * User authentication
          */
@@ -115,14 +120,18 @@ class AuthorizeController extends BaseController
                 if ($response instanceof Response\Authorize\Error) {
                     return $this->errorResponse($response, 'Error in preDispatch()');
                 }
-                $this->saveContext($context);
+                // $this->saveContext($context);
                 $this->logInfo('preDispatch OK');
             } catch (\Exception $e) {
                 $response = $dispatcher->serverErrorResponse(sprintf("[%s] %s", get_class($e), $e->getMessage()));
                 return $this->errorResponse($response, 'General error in preDispatch');
             }
             
+            // ???
+            $contextManager->persistContext($context);
+            
             $manager = $this->getAuthenticationManager();
+            $manager->setContext($context);
             
             $authenticationHandlerName = $manager->getAuthenticationHandler();
             $this->logInfo(sprintf("redirecting user to authentication handler [%s]", $authenticationHandlerName));
@@ -140,7 +149,8 @@ class AuthorizeController extends BaseController
         /*
          * Clear context (!)
          */
-        $this->clearContext();
+        // $this->clearContext();
+        $contextManager->unpersistContext();
         
         /*
          * Dispatching response
@@ -170,7 +180,8 @@ class AuthorizeController extends BaseController
 
     protected function errorResponse(Response\Authorize\Error $response, $label = 'Error')
     {
-        $this->clearContext();
+        // $this->clearContext();
+        $this->getAuthorizeContextManager()->unpersistContext();
         $this->logError(sprintf("%s: %s (%s)", $label, $response->getErrorMessage(), $response->getErrorDescription()));
         return $response->getHttpResponse();
     }

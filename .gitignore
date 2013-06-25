@@ -4,3 +4,4 @@
 composer.lock
 vendor
 client/sample_client.php
+data/client/metadata.json

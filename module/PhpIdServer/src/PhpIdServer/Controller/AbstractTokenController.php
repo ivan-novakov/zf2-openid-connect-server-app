@@ -58,7 +58,7 @@ abstract class AbstractTokenController extends BaseController
      * @param Dispatcher\DispatcherInterface $dispatcher
      * @return \Zend\Http\Response
      */
-    protected function _dispatch(Dispatcher\DispatcherInterface $dispatcher)
+    protected function dispatchTokenRequest(Dispatcher\DispatcherInterface $dispatcher)
     {
         try {
             $this->logInfo('Dispatching request...');

@@ -1,5 +1,7 @@
 # OpenID Connect Server in PHP
 
+**Note:** This is a work in progress. If you are interested, please, contact me.
+
 ## Introduction
 
 ## Requirements
